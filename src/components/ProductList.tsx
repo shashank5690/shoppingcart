@@ -28,6 +28,11 @@ const ProductList: React.FC = () => {
 
   return (
     <Box>
+      <Box sx={{ textAlign: 'center', marginBottom: 4 }}>
+        <Typography variant="h2" component="div">
+          Welcome to Binmile Shoppe!!
+        </Typography>
+      </Box>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
