@@ -6,8 +6,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { Product } from '../types/Product';
+import { useCart } from '../context/CartContext';
 
 const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
+  const { cart,  addToCart,  removeFromCart } = useCart(); 
+  const isIncart = cart.some((item) => item.id ===  product.id);
+
+
   return (
     <Grid item xs={12} md={6} lg={6}> 
 
@@ -28,13 +33,18 @@ const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
           <Typography variant="body1" component="div" sx={{ fontWeight: 'bold', marginTop: 1 }}>
             ${product.price.toFixed(2)}
           </Typography>
-          <Button variant="contained" sx={{ marginTop: 1 }}>
-            Add to Cart
-          </Button>
+          {isIncart ? (
+            <Button variant="contained" color="error" sx={{ marginTop: 1 }} onClick={() => removeFromCart(product.id)}>
+              Remove from Cart
+            </Button>
+          ) : (
+            <Button variant="contained" sx={{ marginTop: 1 }} onClick={() => addToCart(product)}>
+              Add to Cart
+            </Button>
+          )}
         </CardContent>
       </Card>
-      
-    </Grid>  // grid for space
+    </Grid>
   );
 };
 
