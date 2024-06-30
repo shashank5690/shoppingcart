@@ -18,7 +18,7 @@ export const useCart = () => {
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [cart, setCart] = useState<Product[]>([]);
 
-
+//useEffect for first render for load cart from indexdb and async ret. data from it 
 useEffect(() => {
     const loadCart = async () => {
       const storedCart = await localforage.getItem<Product[]>('cart');
@@ -29,13 +29,16 @@ useEffect(() => {
     loadCart();
   }, []);
 
+ 
+// useeffect runs when cart state changes
   useEffect (() => {
     const saveCart =  async () => {
         await localforage.setItem('cart',cart);
     };
     saveCart();
   },[cart]);
-
+  
+// add the product to cart by state updating
   const addToCart = async (product: Product) => {
     setCart((prevCart) => {
       const updatedCart = [...prevCart, product];
@@ -51,6 +54,8 @@ useEffect(() => {
       return updatedCart;
     });
   };
+
+  // clear the cat by  setting state to empty array
 
   const clearCart = async () => {
     setCart([]);

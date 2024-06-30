@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Product } from "../types/Product";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -12,40 +10,21 @@ import Badge from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCart } from '../context/CartContext';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useFetchProducts } from '../utils/useFetchProducts';
 
 const ProductList: React.FC = () => {
-    const[products,setproducts] = useState<Product[]>([]);
-    const[cartCount,setcartCount] =  useState<number>(0);
-    const[loading,setloading] = useState<boolean>(true);
-    const navigate = useNavigate(); // for cart
-    const { cart }  = useCart();
+  const { products, loading, error } = useFetchProducts();
+  const [cartCount, setCartCount] = useState<number>(0);
+  const navigate = useNavigate();
+  const { cart } = useCart();
 
-
-useEffect(() => {
-    const fetchedProducts = async () => {
-        try {
-        const res = await axios.get<Product[]>('https://fakestoreapi.com/products');
-        setproducts(res.data);
-     } catch(error){
-        console.log('error in fetching product:',error);
-      } finally {
-        setloading(false);
-      }
-    };
-
-      fetchedProducts(); // initial call
-
-  },[]); 
-
-  // cart count 
   useEffect(() => {
-    setcartCount(cart.length);
+    setCartCount(cart.length);
   }, [cart]);
 
-  //cart click handle event
   const handleCartClicking = () => {
     navigate('./cart');
-  }
+  };
 
   return (
     <Box>
@@ -62,18 +41,19 @@ useEffect(() => {
         </Toolbar>
       </AppBar>
       {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
           <CircularProgress />
         </Box>
+      ) : error ? (
+        <Typography variant="h6" color="error" sx={{ textAlign: 'center', marginTop: 2 }}>
+          {error}
+        </Typography>
       ) : (
-      <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', maxHeight: '80vh' }}>
-        {products.map((product) => (
-          <ProductItem 
-            key={product.id} 
-            product={product} 
-          />
-        ))}
-      </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', maxHeight: '80vh' }}>
+          {products.map((product) => (
+            <ProductItem key={product.id} product={product} />
+          ))}
+        </Box>
       )}
     </Box>
   );
