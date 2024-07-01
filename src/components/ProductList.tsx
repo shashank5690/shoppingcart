@@ -29,12 +29,12 @@ const ProductList: React.FC = () => {
   return (
     <Box>
       <Box sx={{ textAlign: 'center', marginBottom: 4 }}>
-        <Typography variant="h2" component="div">
+      <Typography variant="h2" component="div" sx={{ fontFamily: 'Kanit, sans-serif' }}>
           Welcome to Binmile Shoppe!!
         </Typography>
       </Box>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="static" sx={{ color:"black"}} >
+        <Toolbar sx={{ color:" black"}}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Product Listing
           </Typography>
